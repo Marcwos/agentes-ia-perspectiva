@@ -1,0 +1,58 @@
+# Root level .gitignore for Agentes-inteligentes project
+
+# Database files (keep only the structure, not the data)
+tmp/*.db
+tmp/*.sqlite
+tmp/*.sqlite3
+*.db-journal
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+log/
+
+# Temporary files
+.tmp/
+.temp/
+
+# Backup files
+*.bak
+*.backup
+
+# Node modules (for frontend)
+node_modules/
+
+# Python virtual environments (in case someone creates them at root level)
+venv/
+env/
+.venv/
+.env/
+
+# Compiled files
+*.pyc
+__pycache__/
+
+# Test files
+test_*.py
