@@ -3,5 +3,72 @@
 @plugin "daisyui"{
   themes: light --default, dark --prefersdark, cupcake;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html, body {
+  height: 100%;
+  background: #101915;
+  color: #a8ff60;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: #101915;
+  color: #a8ff60;
+}
+
+/* Scrollbar verde */
+::-webkit-scrollbar {
+  width: 8px;
+  background: #101915;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e2d1b;
+  border-radius: 4px;
+}
+
+/* Links y acentos */
+a, .text-accent, .text-green {
+  color: #a8ff60;
+}
+
+/* Botones principales */
+.btn, button, .mat-button, .mat-raised-button {
+  background: linear-gradient(90deg, #1e2d1b 0%, #2ecc40 100%);
+  color: #a8ff60;
+  border: none;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+.btn:hover, button:hover, .mat-button:hover, .mat-raised-button:hover {
+  background: linear-gradient(90deg, #2ecc40 0%, #1e2d1b 100%);
+  color: #d0ffb0;
+}
+
+/* Inputs */
+input, textarea, select {
+  background: #181f1b;
+  color: #a8ff60;
+  border: 1px solid #2ecc40;
+  border-radius: 6px;
+}
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid #2ecc40;
+}
+
+/* Tarjetas y paneles */
+.card, .panel, .mat-card {
+  background: #181f1b;
+  color: #a8ff60;
+  border: 1px solid #2ecc40;
+  border-radius: 10px;
+}
+
+/* Títulos */
+h1, h2, h3, h4, h5, h6 {
+  color: #a8ff60;
+}
+
+/* Sombra verde */
+.shadow-green {
+  box-shadow: 0 2px 8px 0 #2ecc4060;
+}

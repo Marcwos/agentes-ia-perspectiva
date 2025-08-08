@@ -9,6 +9,7 @@ import { ChatSession } from '../../models/chat-model';
 import { SseService } from '../../services/sse-service';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { AuthService } from '../../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -23,12 +24,17 @@ export class SidebarComponent implements OnInit, OnDestroy {
   readonly siteRoutesConfig = siteConfigRoutes;
   chatSessions$: Observable<ChatSession[]>;
   private destroy$ = new Subject<void>();
+  
+  // Estado del menú de cuenta
+  isAccountMenuOpen = false;
+  isLoggingOut = false;
 
   constructor(
     private chatHistoryService: ChatHistoryService,
     private sseService: SseService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.chatSessions$ = this.chatHistoryService.getCurrentSessions();
   }
@@ -110,5 +116,50 @@ export class SidebarComponent implements OnInit, OnDestroy {
     return session.session_id;
   }
 
+  // Métodos para el menú de cuenta
+  toggleAccountMenu(): void {
+    this.isAccountMenuOpen = !this.isAccountMenuOpen;
+  }
+
+  getCurrentUserEmail(): string {
+    const user = this.authService.getCurrentUser();
+    return user?.email || 'usuario@ejemplo.com';
+  }
+
+  logout(): void {
+    if (this.isLoggingOut) return;
+
+    this.isLoggingOut = true;
+    this.isAccountMenuOpen = false;
+
+    this.authService.logout().subscribe({
+      next: (response: any) => {
+        console.log('✅ Logout completado:', response);
+        
+        // Redireccionar al login o página principal
+        this.router.navigate(['/login']).then(() => {
+          console.log('🏠 Redirigido a login');
+        }).catch(() => {
+          window.location.href = '/login';
+        });
+      },
+      error: (error: any) => {
+        console.error('❌ Error en logout:', error);
+        
+        // Incluso si hay error, redirigir
+        this.router.navigate(['/login']).catch(() => {
+          window.location.href = '/login';
+        });
+      },
+      complete: () => {
+        this.isLoggingOut = false;
+      }
+    });
+  }
+
+  // Navegar de vuelta a la selección de agentes
+  goToAgentSelection(): void {
+    this.router.navigate(['/']);
+  }
 
 }

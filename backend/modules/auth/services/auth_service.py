@@ -15,7 +15,7 @@ from modules.user.schemas import UserCreateSchema, UserResponseSchema, UserInDB
 from modules.user.model.user_model import UserModel
 from db.database import get_db
 from core.config import settings
-from ..schemas import TokenData, Token, LoginResponseSchema
+from ..schemas import TokenData, Token, LoginResponseSchema, LogoutResponseSchema
 
 
 CRENDENTIAL_EXCEPTION = HTTPException(
@@ -114,3 +114,39 @@ class AuthService:
         return LoginResponseSchema(
             access_token=token_obj, user=user_response
         )
+
+    def logout_user(self, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+        """
+        Logout del usuario.
+        En este caso, como estamos usando JWT stateless, simplemente validamos el token
+        y devolvemos un mensaje de éxito. El cliente debe eliminar el token.
+        
+        Para una implementación más segura, se podría implementar una blacklist de tokens.
+        """
+        try:
+            # Validar que el token sea válido
+            payload = self.token_service.decode_token(token)
+            email: str = payload.get("sub")
+            if email is None:
+                raise CRENDENTIAL_EXCEPTION
+            
+            # Verificar que el usuario exista
+            user = db.query(UserModel).filter(UserModel.email == email).first()
+            if user is None:
+                raise CRENDENTIAL_EXCEPTION
+                
+            logger.info(f"Usuario {email} ha cerrado sesión exitosamente")
+            
+            return {
+                "message": "Logout successful",
+                "detail": "Session closed successfully. Please remove the token from client."
+            }
+            
+        except InvalidTokenError:
+            raise CRENDENTIAL_EXCEPTION
+        except jwt.ExpiredSignatureError:
+            # Si el token ya expiró, consideramos el logout como exitoso
+            return {
+                "message": "Logout successful",
+                "detail": "Token was already expired."
+            }

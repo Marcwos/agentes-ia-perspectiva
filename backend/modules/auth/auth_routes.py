@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from .services.auth_service import AuthService
 from modules.user.schemas import UserCreateSchema, UserResponseSchema
-from .schemas import LoginResponseSchema
+from .schemas import LoginResponseSchema, LogoutResponseSchema
 from db.database import get_db
 
 auth_router = APIRouter()
@@ -23,3 +23,8 @@ def login_user(user: UserCreateSchema, db: Session = Depends(get_db)) -> LoginRe
 @auth_router.get("/me")
 def current_user(token: str, db: Session = Depends(get_db)) -> UserResponseSchema:
     return auth_service.get_current_user(token, db)
+
+
+@auth_router.post("/logout")
+def logout_user(token: str, db: Session = Depends(get_db)) -> LogoutResponseSchema:
+    return auth_service.logout_user(token, db)

@@ -5,3 +5,7 @@ from .token_schema import Token
 class LoginResponseSchema(BaseModel):
     access_token: Token
     user: UserResponseSchema
+
+class LogoutResponseSchema(BaseModel):
+    message: str
+    detail: str

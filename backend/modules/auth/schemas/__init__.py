@@ -1,2 +1,2 @@
 from .token_schema import TokenData, Token
-from .login_response_schema import LoginResponseSchema
+from .login_response_schema import LoginResponseSchema, LogoutResponseSchema
